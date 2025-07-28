@@ -80,7 +80,7 @@ def show_self_assessment():
 
     st.markdown("Answer the following to get a basic risk score:")
 
-    q1 = st.selectbox("Do you experience frequent or severe headaches?", ["No", "Yes"])
+    q1 = st.selectbox("Do you experience frequent or severe headaches?", ["No", "Yes","partially"])
     q2 = st.selectbox("Do you have blurred vision or vision loss?", ["No", "Yes"])
     q3 = st.selectbox("Do you feel dizzy or have balance issues?", ["No", "Yes"])
     q4 = st.selectbox("Have you experienced seizures recently?", ["No", "Yes"])
