@@ -38,7 +38,7 @@ st.title(" Brain Tumor Detection System")
 st.subheader("Detects Tumor Presence from MRI Scans")
 
 # Add an image
-st.image("mri.jpg", caption="Understanding Brain Tumors", use_column_width=True)
+st.image(image, caption="Uploaded Image", use_container_width=True)
 st.markdown("""
         ## What is a Brain Tumor?
         A brain tumor is an abnormal growth of cells in the brain. It can be **malignant (cancerous)** or **benign (non-cancerous)**. Tumors affect brain function and can cause serious complications if untreated.
@@ -68,7 +68,7 @@ def show_prediction_page(feature_model, clf):
 
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+        st.image(image, caption="Uploaded Image", use_container_width=True)
 
         if st.button("Predict Tumor Type"):
             features = extract_features(image, feature_model)
