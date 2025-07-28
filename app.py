@@ -31,15 +31,8 @@ def extract_features(img, feature_model):
 
 # Show homepage
 def show_home():
-    st.set_page_config(page_title="Brain Tumor Detector", layout="centered")
-
-# Title and header
-st.title(" Brain Tumor Detection System")
-st.subheader("Detects Tumor Presence from MRI Scans")
-
-# Add an image
-st.image("mri.jpg", caption="Uploaded Image", use_container_width=True)
-st.markdown("""
+    st.title(" Brain Tumor Detection System")
+    st.markdown("""
         ## What is a Brain Tumor?
         A brain tumor is an abnormal growth of cells in the brain. It can be **malignant (cancerous)** or **benign (non-cancerous)**. Tumors affect brain function and can cause serious complications if untreated.
 
