@@ -38,7 +38,7 @@ st.title(" Brain Tumor Detection System")
 st.subheader("Detects Tumor Presence from MRI Scans")
 
 # Add an image
-st.image(image, caption="Uploaded Image", use_container_width=True)
+st.image("mri.jpg", caption="Uploaded Image", use_container_width=True)
 st.markdown("""
         ## What is a Brain Tumor?
         A brain tumor is an abnormal growth of cells in the brain. It can be **malignant (cancerous)** or **benign (non-cancerous)**. Tumors affect brain function and can cause serious complications if untreated.
