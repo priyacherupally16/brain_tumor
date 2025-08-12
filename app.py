@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import streamlit as st
-import matplotlib.pyplot as plt
 from PIL import Image
 import pickle
 from tensorflow.keras.preprocessing.image import img_to_array
@@ -73,16 +72,7 @@ def show_prediction_page(feature_model, clf):
             st.success(f"📌 Prediction: **{labels[prediction[0]]}**")
 
             st.write("### Prediction Probabilities:")
-            fig, ax = plt.subplots()
-            ax.pie(
-            prob,
-            labels=labels,
-            autopct='%1.1f%%',
-            startangle=90
-            )
-            ax.axis('equal')  # Equal aspect ratio for a perfect circle
-            st.pyplot(fig)
-
+            st.bar_chart({label: [prob[i]] for i, label in enumerate(labels)})
 
 # Show self-assessment
 def show_self_assessment():
@@ -118,4 +108,5 @@ elif app_mode == "Predict Tumor":
     show_prediction_page(feature_model, clf)
 elif app_mode == "Self Assessment":
     show_self_assessment()
+
 
