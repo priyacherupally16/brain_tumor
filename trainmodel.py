@@ -55,13 +55,25 @@ X_train, X_test, y_train, y_test = train_test_split(X_flat, y, test_size=0.2, ra
 
 # Step 6: Train Random Forest Classifier
 print("Training classifier...")
-clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf = RandomForestClassifier(n_estimators=300, random_state=42)
 clf.fit(X_train, y_train)
 
 # Step 7: Evaluate
 y_pred = clf.predict(X_test)
 print("Classification Report:\n", classification_report(y_test, y_pred))
 
+cm = confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(6, 5))
+sns.heatmap(cm, annot=True, fmt='d', cmap='YlGnBu',
+            xticklabels=class_labels, yticklabels=class_labels)
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+plt.title("Confusion Matrix (4 Classes)")
+plt.tight_layout()
+plt.show()
+
+
 # Step 8: Save Model
 with open("rf_model.pkl", "wb") as f:
     pickle.dump(clf, f)
+
