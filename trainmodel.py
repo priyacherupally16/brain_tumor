@@ -1,12 +1,12 @@
 import os
 import numpy as np
+import pickle
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input
 from tensorflow.keras.models import Model
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
-import pickle
 
 # Step 1: Define Data Paths
 folders = {
@@ -26,42 +26,64 @@ def load_images(folder, label):
             image = img_to_array(image)
             image = preprocess_input(image)
             data.append((image, label))
-        except:
+        except Exception as e:
+            print(f"Failed to load {file}: {e}")
             continue
     return data
 
-# Step 3: Load data for each class with a label
+# Step 3: Load data
 print("Loading images...")
 data = []
-data += load_images(folders['glioma'], 0)
-data += load_images(folders['meningioma'], 1)
-data += load_images(folders['notumor'], 2)
-data += load_images(folders['pituitary'], 3)
+label_map = {'glioma': 0, 'meningioma': 1, 'notumor': 2, 'pituitary': 3}
+
+for label_name, label_id in label_map.items():
+    data += load_images(folders[label_name], label_id)
+
+if not data:
+    raise ValueError("No images found. Check your dataset paths.")
 
 np.random.shuffle(data)
 
 X = np.array([img for img, label in data])
 y = np.array([label for img, label in data])
 
-# Step 4: Feature Extraction with VGG16
-print("Extracting features...")
+# Step 4: Feature Extraction
+print("Extracting features with VGG16...")
 base_model = VGG16(weights='imagenet', include_top=False, input_shape=(128, 128, 3))
-model = Model(inputs=base_model.input, outputs=base_model.output)
-features = model.predict(X, batch_size=32)
+feature_model = Model(inputs=base_model.input, outputs=base_model.output)
+
+# Predict in batches to prevent memory overflow
+batch_size = 32
+features = []
+
+for i in range(0, len(X), batch_size):
+    batch = X[i:i+batch_size]
+    batch_features = feature_model.predict(batch)
+    features.append(batch_features)
+
+features = np.concatenate(features, axis=0)
 X_flat = features.reshape(features.shape[0], -1)
 
 # Step 5: Train/Test Split
 X_train, X_test, y_train, y_test = train_test_split(X_flat, y, test_size=0.2, random_state=42)
 
-# Step 6: Train Random Forest Classifier
-print("Training classifier...")
+# Step 6: Train Classifier
+print("Training Random Forest Classifier...")
 clf = RandomForestClassifier(n_estimators=100, random_state=42)
 clf.fit(X_train, y_train)
 
 # Step 7: Evaluate
+print("Evaluating model...")
 y_pred = clf.predict(X_test)
 print("Classification Report:\n", classification_report(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
 
-# Step 8: Save Model
+# Step 8: Save Model and Labels
 with open("rf_model.pkl", "wb") as f:
     pickle.dump(clf, f)
+
+with open("label_map.pkl", "wb") as f:
+    pickle.dump(label_map, f)
+
+print("✅ Model and label map saved successfully.")
+
