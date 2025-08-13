@@ -55,16 +55,13 @@ X_train, X_test, y_train, y_test = train_test_split(X_flat, y, test_size=0.2, ra
 
 # Step 6: Train Random Forest Classifier
 print("Training classifier...")
-clf = RandomForestClassifier(n_estimators=300, random_state=42)
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
 clf.fit(X_train, y_train)
 
 # Step 7: Evaluate
 y_pred = clf.predict(X_test)
 print("Classification Report:\n", classification_report(y_test, y_pred))
 
-
 # Step 8: Save Model
 with open("rf_model.pkl", "wb") as f:
     pickle.dump(clf, f)
-
-
