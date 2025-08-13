@@ -31,7 +31,7 @@ def extract_features(img, feature_model):
 
 # Show homepage
 def show_home():
-    st.title(" Brain Tumor Detection System")
+    st.title("🧠 Brain Tumor Detection & Awareness")
     st.markdown("""
         ## What is a Brain Tumor?
         A brain tumor is an abnormal growth of cells in the brain. It can be **malignant (cancerous)** or **benign (non-cancerous)**. Tumors affect brain function and can cause serious complications if untreated.
@@ -61,7 +61,7 @@ def show_prediction_page(feature_model, clf):
 
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image", use_container_width=True)
+        st.image(image, caption="Uploaded Image", use_column_width=True)
 
         if st.button("Predict Tumor Type"):
             features = extract_features(image, feature_model)
@@ -80,7 +80,7 @@ def show_self_assessment():
 
     st.markdown("Answer the following to get a basic risk score:")
 
-    q1 = st.selectbox("Do you experience frequent or severe headaches?", ["No", "Yes","partially"])
+    q1 = st.selectbox("Do you experience frequent or severe headaches?", ["No", "Yes"])
     q2 = st.selectbox("Do you have blurred vision or vision loss?", ["No", "Yes"])
     q3 = st.selectbox("Do you feel dizzy or have balance issues?", ["No", "Yes"])
     q4 = st.selectbox("Have you experienced seizures recently?", ["No", "Yes"])
@@ -108,4 +108,3 @@ elif app_mode == "Predict Tumor":
     show_prediction_page(feature_model, clf)
 elif app_mode == "Self Assessment":
     show_self_assessment()
-            
